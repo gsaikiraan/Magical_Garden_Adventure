@@ -1,0 +1,491 @@
+/* ===================================
+   HERANIYA'S MAGICAL TAP GARDEN
+   Designed for ages 1yr 9mo - 1mo
+   =================================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    font-family: 'Comic Sans MS', 'Arial Rounded MT Bold', cursive, sans-serif;
+    position: relative;
+    touch-action: none; /* Prevent scrolling */
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+/* ===================================
+   SKY BACKGROUND
+   =================================== */
+.sky {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom,
+        #87CEEB 0%,    /* Sky blue */
+        #98D8E8 30%,
+        #B0E0E6 60%,
+        #90EE90 100%   /* Light green at bottom */
+    );
+    z-index: 1;
+}
+
+/* Auto-floating stars */
+.star {
+    position: absolute;
+    font-size: 40px;
+    animation: floatStar 8s ease-in-out infinite;
+    filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.8));
+    z-index: 2;
+}
+
+@keyframes floatStar {
+    0%, 100% { transform: translateY(0) rotate(0deg); opacity: 0.6; }
+    50% { transform: translateY(-30px) rotate(180deg); opacity: 1; }
+}
+
+/* Clouds */
+.cloud {
+    position: absolute;
+    font-size: 60px;
+    animation: floatCloud 15s linear infinite;
+    opacity: 0.7;
+    z-index: 2;
+}
+
+@keyframes floatCloud {
+    0% { transform: translateX(-100px); }
+    100% { transform: translateX(calc(100vw + 100px)); }
+}
+
+/* ===================================
+   GARDEN (Main Interactive Area)
+   =================================== */
+.garden {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 3;
+    cursor: pointer;
+}
+
+/* ===================================
+   FLOWERS
+   =================================== */
+.flower {
+    position: absolute;
+    font-size: 80px; /* VERY LARGE for easy tapping */
+    transform-origin: bottom center;
+    animation: bloomIn 0.6s ease-out forwards, gentleSway 3s ease-in-out infinite;
+    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2));
+    z-index: 4;
+    cursor: pointer;
+    /* Large touch target */
+    padding: 20px;
+    margin: -20px;
+}
+
+@keyframes bloomIn {
+    0% {
+        transform: scale(0) rotate(-45deg);
+        opacity: 0;
+    }
+    60% {
+        transform: scale(1.2) rotate(5deg);
+    }
+    100% {
+        transform: scale(1) rotate(0deg);
+        opacity: 1;
+    }
+}
+
+@keyframes gentleSway {
+    0%, 100% {
+        transform: rotate(-3deg);
+    }
+    50% {
+        transform: rotate(3deg);
+    }
+}
+
+/* Flower types with different colors */
+.flower.type-1 { color: #FF69B4; } /* Hot pink */
+.flower.type-2 { color: #FFD700; } /* Gold */
+.flower.type-3 { color: #FF6347; } /* Tomato red */
+.flower.type-4 { color: #9370DB; } /* Purple */
+.flower.type-5 { color: #00CED1; } /* Turquoise */
+.flower.type-6 { color: #FF69B4; } /* Hot pink */
+
+/* ===================================
+   BUTTERFLIES
+   =================================== */
+.butterfly-layer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 5;
+}
+
+.butterfly {
+    position: absolute;
+    font-size: 70px;
+    animation: flyButterfly 6s ease-in-out infinite;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+    pointer-events: auto;
+    cursor: pointer;
+    /* Large touch target */
+    padding: 25px;
+    margin: -25px;
+}
+
+@keyframes flyButterfly {
+    0%, 100% {
+        transform: translate(0, 0) rotate(-10deg) scale(1);
+    }
+    25% {
+        transform: translate(50px, -40px) rotate(5deg) scale(1.1);
+    }
+    50% {
+        transform: translate(30px, -80px) rotate(10deg) scale(1);
+    }
+    75% {
+        transform: translate(-20px, -40px) rotate(-5deg) scale(1.1);
+    }
+}
+
+/* Flutter wing animation */
+.butterfly::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    animation: flutter 0.3s ease-in-out infinite;
+}
+
+@keyframes flutter {
+    0%, 100% { transform: scaleX(1); }
+    50% { transform: scaleX(0.95); }
+}
+
+/* ===================================
+   SPARKLES
+   =================================== */
+.sparkle-layer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 6;
+}
+
+.sparkle {
+    position: absolute;
+    font-size: 50px;
+    animation: sparkleRise 1.5s ease-out forwards;
+    pointer-events: none;
+}
+
+@keyframes sparkleRise {
+    0% {
+        transform: translate(0, 0) scale(0) rotate(0deg);
+        opacity: 1;
+    }
+    50% {
+        transform: translate(var(--dx, 20px), -60px) scale(1.2) rotate(180deg);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(var(--dx, 20px), -120px) scale(0) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+/* ===================================
+   RAINBOW BURST (Special Effect)
+   =================================== */
+.rainbow-burst {
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    animation: burstExpand 0.8s ease-out forwards;
+    pointer-events: none;
+}
+
+@keyframes burstExpand {
+    0% {
+        transform: scale(0);
+        opacity: 1;
+        box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7);
+    }
+    100% {
+        transform: scale(3);
+        opacity: 0;
+        box-shadow:
+            0 0 60px 20px rgba(255, 0, 255, 0.4),
+            0 0 80px 40px rgba(0, 255, 255, 0.4),
+            0 0 100px 60px rgba(255, 255, 0, 0.4);
+    }
+}
+
+/* ===================================
+   FLOATING HEARTS (Special Effect)
+   =================================== */
+.heart {
+    position: absolute;
+    font-size: 60px;
+    animation: heartFloat 2s ease-out forwards;
+    pointer-events: none;
+}
+
+@keyframes heartFloat {
+    0% {
+        transform: translateY(0) scale(0);
+        opacity: 1;
+    }
+    50% {
+        transform: translateY(-100px) scale(1.2);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(-200px) scale(0.8);
+        opacity: 0;
+    }
+}
+
+/* ===================================
+   ENCOURAGEMENT MESSAGE
+   =================================== */
+.encouragement {
+    position: fixed;
+    top: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 36px;
+    color: white;
+    text-shadow:
+        2px 2px 4px rgba(0,0,0,0.5),
+        0 0 20px rgba(255,255,255,0.5);
+    z-index: 10;
+    animation: gentlePulse 2s ease-in-out infinite;
+    pointer-events: none;
+}
+
+@keyframes gentlePulse {
+    0%, 100% { transform: translateX(-50%) scale(1); opacity: 0.9; }
+    50% { transform: translateX(-50%) scale(1.1); opacity: 1; }
+}
+
+/* ===================================
+   SOUND TOGGLE (For Parents)
+   =================================== */
+.sound-toggle {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: 3px solid white;
+    background: rgba(0, 0, 0, 0.3);
+    font-size: 30px;
+    cursor: pointer;
+    z-index: 100;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(5px);
+}
+
+.sound-toggle:hover {
+    background: rgba(0, 0, 0, 0.5);
+    transform: scale(1.1);
+}
+
+.sound-toggle.muted {
+    opacity: 0.5;
+}
+
+.sound-toggle.muted::after {
+    content: '🔇';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+/* ===================================
+   BUBBLE EFFECTS
+   =================================== */
+.bubble {
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%,
+        rgba(255, 255, 255, 0.8),
+        rgba(255, 255, 255, 0.3) 40%,
+        rgba(255, 255, 255, 0.1)
+    );
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    animation: bubbleFloat 4s ease-in-out forwards;
+    pointer-events: auto;
+    cursor: pointer;
+    box-shadow:
+        inset 0 20px 30px rgba(255, 255, 255, 0.3),
+        0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+@keyframes bubbleFloat {
+    0% {
+        transform: translateY(0) scale(0);
+        opacity: 0;
+    }
+    10% {
+        opacity: 1;
+    }
+    90% {
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(-100vh) scale(1.5);
+        opacity: 0;
+    }
+}
+
+/* ===================================
+   HAPPY FACE (Appears on Multiple Taps)
+   =================================== */
+.happy-face {
+    position: absolute;
+    font-size: 100px;
+    animation: happyBounce 1s ease-out forwards;
+    pointer-events: none;
+    z-index: 7;
+}
+
+@keyframes happyBounce {
+    0% {
+        transform: scale(0) rotate(-45deg);
+        opacity: 0;
+    }
+    50% {
+        transform: scale(1.3) rotate(5deg);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(0) rotate(45deg);
+        opacity: 0;
+    }
+}
+
+/* ===================================
+   CONFETTI BURST
+   =================================== */
+.confetti {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    animation: confettiFall 2s ease-out forwards;
+    pointer-events: none;
+}
+
+@keyframes confettiFall {
+    0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(100vh) rotate(720deg);
+        opacity: 0;
+    }
+}
+
+/* ===================================
+   SPECIAL: SUNBURST EFFECT
+   =================================== */
+.sunburst {
+    position: absolute;
+    width: 150px;
+    height: 150px;
+    animation: sunburstSpin 2s linear forwards;
+    pointer-events: none;
+    z-index: 4;
+}
+
+@keyframes sunburstSpin {
+    0% {
+        transform: scale(0) rotate(0deg);
+        opacity: 1;
+    }
+    50% {
+        opacity: 1;
+    }
+    100% {
+        transform: scale(2) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+/* ===================================
+   RESPONSIVE DESIGN
+   =================================== */
+@media (max-width: 768px) {
+    .flower {
+        font-size: 70px;
+    }
+
+    .butterfly {
+        font-size: 60px;
+    }
+
+    .encouragement {
+        font-size: 28px;
+    }
+}
+
+@media (max-height: 600px) {
+    .flower {
+        font-size: 60px;
+    }
+
+    .butterfly {
+        font-size: 50px;
+    }
+}
+
+/* ===================================
+   ACCESSIBILITY
+   =================================== */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    .flower {
+        filter: drop-shadow(0 6px 12px rgba(0,0,0,0.5));
+    }
+
+    .butterfly {
+        filter: drop-shadow(0 4px 8px rgba(0,0,0,0.5));
+    }
+}
